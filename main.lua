@@ -151,7 +151,7 @@ Eggs:OnChanged(function()
                 end
             end
 
-            task.wait(10)
+            task.wait(1)
         end
     end)
 end)
