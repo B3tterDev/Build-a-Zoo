@@ -72,14 +72,6 @@ local mutations = Tabs.Main:AddDropdown("mutations", {
     Default = cfg.mutations or {},
 })
 
-local limit = Tabs.Main:AddInput("Input", {
-    Title = "เงินต้องเยอะกว่าเท่าไหร่ถึงจะซื้อไข่",
-    Default = cfg.limit or 100000,
-    Placeholder = "Placeholder",
-    Numeric = true, -- Only allows numbers
-    Finished = false, -- Only calls callback when you press enter
-})
-
 local Eggs = Tabs.Main:AddToggle("Eggs", { Title = "เก็บไข่อัตโนมัติ", Default = cfg.eggs or false })
 
 Money:OnChanged(function()
@@ -127,11 +119,6 @@ mutations:OnChanged(function(Value)
     SaveConfig(cfg)
 end)
 
-limit:OnChanged(function()
-    cfg.limit = tonumber(limit.Value)
-    SaveConfig(cfg)
-end)
-
 Eggs:OnChanged(function()
     cfg.eggs = Options.Eggs.Value
     SaveConfig(cfg)
@@ -141,28 +128,25 @@ Eggs:OnChanged(function()
         while Options.Eggs.Value do
 
             local accounts = game:GetService("Players").LocalPlayer.leaderstats["Money $"]
-            local Limit = tonumber(limit.Value)
-            if Limit <= accounts.Value then
-                local AssignedIslandName = game:GetService("Players").LocalPlayer:GetAttribute("AssignedIslandName")
-                local Conveyor = game:GetService("ReplicatedStorage").Eggs:WaitForChild(AssignedIslandName):GetChildren()
+            local AssignedIslandName = game:GetService("Players").LocalPlayer:GetAttribute("AssignedIslandName")
+            local Conveyor = game:GetService("ReplicatedStorage").Eggs:WaitForChild(AssignedIslandName):GetChildren()
 
-                for _, Egg in pairs(Conveyor) do
-                    local T = Egg:GetAttribute('T')
-                    local M = Egg:GetAttribute('M')
+            for _, Egg in pairs(Conveyor) do
+                local T = Egg:GetAttribute('T')
+                local M = Egg:GetAttribute('M')
 
-                    if next(eggs.type) and (T and eggs.type[T]) then
-                        if next(eggs.mutations) and (M and eggs.mutations[M]) then
-                            local args = { [1] = "BuyEgg", [2] = Egg.Name }
-                            game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("CharacterRE"):FireServer(unpack(args))
-                        else
-                            local args = { [1] = "BuyEgg", [2] = Egg.Name }
-                            game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("CharacterRE"):FireServer(unpack(args))
-                        end
+                if next(eggs.type) and (T and eggs.type[T]) then
+                    if next(eggs.mutations) and (M and eggs.mutations[M]) then
+                        local args = { [1] = "BuyEgg", [2] = Egg.Name }
+                        game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("CharacterRE"):FireServer(unpack(args))
                     else
-                        if next(eggs.mutations) and (M and eggs.mutations[M]) then
-                            local args = { [1] = "BuyEgg", [2] = Egg.Name }
-                            game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("CharacterRE"):FireServer(unpack(args))
-                        end
+                        local args = { [1] = "BuyEgg", [2] = Egg.Name }
+                        game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("CharacterRE"):FireServer(unpack(args))
+                    end
+                else
+                    if next(eggs.mutations) and (M and eggs.mutations[M]) then
+                        local args = { [1] = "BuyEgg", [2] = Egg.Name }
+                        game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("CharacterRE"):FireServer(unpack(args))
                     end
                 end
             end
