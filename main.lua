@@ -118,7 +118,7 @@ mutations:OnChanged(function(Value)
         eggs.mutations[name] = true
     end
 
-    print(table.concat(eggs.mutations, ", "))
+    -- print(table.concat(eggs.mutations, ", "))
     cfg.mutations = Values
     SaveConfig(cfg)
 end)
