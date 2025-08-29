@@ -89,7 +89,6 @@ Money:OnChanged(function()
     end)
 end)
 
-
 type:OnChanged(function(Value)
     local Values = {}
     for Value, State in next, Value do
@@ -158,6 +157,89 @@ Eggs:OnChanged(function()
             end
 
             task.wait(2)
+        end
+    end)
+end)
+
+-- game:GetService("Players").LocalPlayer.PlayerGui.ScreenFoodStore.Root.Frame.ScrollingFrame.Strawberry
+-- game:GetService("Players").LocalPlayer.PlayerGui.ScreenFoodStore.Root.Frame.ScrollingFrame.Blueberry
+-- game:GetService("Players").LocalPlayer.PlayerGui.ScreenFoodStore.Root.Frame.ScrollingFrame.Watermelon
+-- game:GetService("Players").LocalPlayer.PlayerGui.ScreenFoodStore.Root.Frame.ScrollingFrame.Apple
+-- game:GetService("Players").LocalPlayer.PlayerGui.ScreenFoodStore.Root.Frame.ScrollingFrame.Orange
+-- game:GetService("Players").LocalPlayer.PlayerGui.ScreenFoodStore.Root.Frame.ScrollingFrame.Corn
+-- game:GetService("Players").LocalPlayer.PlayerGui.ScreenFoodStore.Root.Frame.ScrollingFrame.Banana
+-- game:GetService("Players").LocalPlayer.PlayerGui.ScreenFoodStore.Root.Frame.ScrollingFrame.Grape
+-- game:GetService("Players").LocalPlayer.PlayerGui.ScreenFoodStore.Root.Frame.ScrollingFrame.Pear
+-- game:GetService("Players").LocalPlayer.PlayerGui.ScreenFoodStore.Root.Frame.ScrollingFrame.Pineapple
+-- game:GetService("Players").LocalPlayer.PlayerGui.ScreenFoodStore.Root.Frame.ScrollingFrame.GoldMango
+-- game:GetService("Players").LocalPlayer.PlayerGui.ScreenFoodStore.Root.Frame.ScrollingFrame.BloodstoneCycad
+-- game:GetService("Players").LocalPlayer.PlayerGui.ScreenFoodStore.Root.Frame.ScrollingFrame.ColossalPinecone
+-- game:GetService("Players").LocalPlayer.PlayerGui.ScreenFoodStore.Root.Frame.ScrollingFrame.VoltGinkgo
+
+Tabs.Store = Window:AddTab({ Title = "ร้านค้า", Icon = "" })
+
+local storeValues = {}
+local storeList = {}
+
+local store = Tabs.Store:AddDropdown("store", {
+    Title = "สินค้า",
+    Values = {
+        'Strawberry',
+        'Blueberry',
+        'Watermelon',
+        'Apple',
+        'Orange',
+        'Corn',
+        'Banana',
+        'Grape',
+        'Pear',
+        'Pineapple',
+        'GoldMango',
+        'BloodstoneCycad',
+        'ColossalPinecone',
+        'VoltGinkgo',
+    },
+    Multi = true,
+    Default = cfg.storeList or {},
+})
+
+local storeToggle = Tabs.Store:AddToggle("storeToggle", { Title = "ซื้อของอัตโนมัติ", Default = cfg.storeToggle or false })
+
+local mutationsMap = { ['Jurassic'] = "Dino" }
+store:OnChanged(function(Value)
+    storeList = {}
+    for Value, State in next, Value do
+        table.insert(storeList, Value)
+    end
+
+    cfg.storeList = storeList
+    SaveConfig(cfg)
+end)
+
+storeToggle:OnChanged(function()
+    cfg.storeToggle = Options.storeToggle.Value
+    SaveConfig(cfg)
+    if not Options.storeToggle.Value then return end
+
+    task.spawn(function()
+        while Options.storeToggle.Value do
+            local accounts = game:GetService("Players").LocalPlayer.leaderstats["Money $"]
+
+            for _, name in pairs(storeList) do
+                local StockLabel = game:GetService("Players").LocalPlayer.PlayerGui.ScreenFoodStore.Root.Frame.ScrollingFrame[name].ItemButton.StockLabel
+                if StockLabel.Text ~= "No Stock" then 
+                    local StockInt = string.gsub(StockLabel.Text, "x", "")
+                    StockInt = tonumber(StockInt)
+
+                    for i=1, StockInt do
+                        local args = { [1] = name }
+                        game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("FoodStoreRE"):FireServer(unpack(args))
+                        task.wait(.100)
+                    end
+                end
+            end
+
+            task.wait(10)
         end
     end)
 end)
