@@ -134,6 +134,9 @@ Eggs:OnChanged(function()
             local AssignedIslandName = game:GetService("Players").LocalPlayer:GetAttribute("AssignedIslandName")
             local Conveyor = game:GetService("ReplicatedStorage").Eggs:WaitForChild(AssignedIslandName):GetChildren()
 
+
+
+            print(HttpService:JSONEncode(eggs.mutations))
             for _, Egg in pairs(Conveyor) do
                 local T = Egg:GetAttribute('T')
                 local M = Egg:GetAttribute('M')
