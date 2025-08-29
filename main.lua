@@ -134,24 +134,26 @@ Eggs:OnChanged(function()
             for _, Egg in pairs(Conveyor) do
                 local T = Egg:GetAttribute('T')
                 local M = Egg:GetAttribute('M')
+                local UID = Egg:GetAttribute('UID')
 
+                print(UID, T, next(eggs.type) and (T and eggs.type[T]), M, next(eggs.mutations) and (M and eggs.mutations[M]))
                 if next(eggs.type) and (T and eggs.type[T]) then
                     if next(eggs.mutations) and (M and eggs.mutations[M]) then
-                        local args = { [1] = "BuyEgg", [2] = Egg.Name }
+                        local args = { [1] = "BuyEgg", [2] = UID }
                         game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("CharacterRE"):FireServer(unpack(args))
                     else
-                        local args = { [1] = "BuyEgg", [2] = Egg.Name }
+                        local args = { [1] = "BuyEgg", [2] = UID }
                         game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("CharacterRE"):FireServer(unpack(args))
                     end
                 else
                     if next(eggs.mutations) and (M and eggs.mutations[M]) then
-                        local args = { [1] = "BuyEgg", [2] = Egg.Name }
+                        local args = { [1] = "BuyEgg", [2] = UID }
                         game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("CharacterRE"):FireServer(unpack(args))
                     end
                 end
             end
 
-            task.wait(1)
+            task.wait(5)
         end
     end)
 end)
