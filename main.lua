@@ -11,10 +11,9 @@ local Window = Fluent:CreateWindow({
     MinimizeKey = Enum.KeyCode.LeftControl
 })
 
-local Tabs = {
-    Main = Window:AddTab({ Title = "หลัก", Icon = "" }),
-} 
+local Tabs = {}
 
+Tabs.Main = Window:AddTab({ Title = "หลัก", Icon = "" })
 local HttpService = game:GetService("HttpService")
 local Options = Fluent.Options
 
@@ -209,11 +208,10 @@ local store = Tabs.Store:AddDropdown("store", {
 
 local storeToggle = Tabs.Store:AddToggle("storeToggle", { Title = "ซื้อของอัตโนมัติ", Default = cfg.storeToggle or false })
 
-local mutationsMap = { ['Jurassic'] = "Dino" }
 store:OnChanged(function(Value)
     storeList = {}
-    for Value, State in next, Value do
-        table.insert(storeList, Value)
+    for Index, State in next, Value do
+        table.insert(storeList, Index)
     end
 
     cfg.storeList = storeList
@@ -227,23 +225,78 @@ storeToggle:OnChanged(function()
 
     task.spawn(function()
         while Options.storeToggle.Value do
-            local accounts = game:GetService("Players").LocalPlayer.leaderstats["Money $"]
+            if next(storeList) then
+                for _, name in pairs(storeList) do
+                    local ScrollingFrame = game:GetService("Players").LocalPlayer.PlayerGui.ScreenFoodStore.Root.Frame.ScrollingFrame
+                    local StockFrame = ScrollingFrame:FindFirstChild(name)
+                    if StockFrame and StockFrame:FindFirstChild("ItemButton") and StockFrame.ItemButton:FindFirstChild("StockLabel") then
+                        local StockLabel = StockFrame.ItemButton.StockLabel
+                        if StockLabel.Text ~= "No Stock" then
+                            local StockInt = string.gsub(StockLabel.Text, "x", "")
+                            StockInt = tonumber(StockInt)
 
-            for _, name in pairs(storeList) do
-                local StockLabel = game:GetService("Players").LocalPlayer.PlayerGui.ScreenFoodStore.Root.Frame.ScrollingFrame[name].ItemButton.StockLabel
-                if StockLabel.Text ~= "No Stock" then 
-                    local StockInt = string.gsub(StockLabel.Text, "x", "")
-                    StockInt = tonumber(StockInt)
-
-                    for i=1, StockInt do
-                        local args = { [1] = name }
-                        game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("FoodStoreRE"):FireServer(unpack(args))
-                        task.wait(.100)
+                            for i = 1, StockInt do
+                                game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("FoodStoreRE"):FireServer(name)
+                                task.wait(0.1)
+                            end
+                        end
                     end
                 end
             end
 
             task.wait(10)
+        end
+    end)
+end)
+
+local feedsList = {}
+Tabs.Peds = Window:AddTab({ Title = "สัตว์หน้าบ้าน", Icon = "" })
+local feeds = Tabs.Peds:AddDropdown("feeds", {
+    Title = "อาหาร",
+    Values = {
+        'Strawberry',
+        'Blueberry',
+        'Watermelon',
+        'Apple',
+        'Orange',
+        'Corn',
+        'Banana',
+        'Grape',
+        'Pear',
+        'Pineapple',
+        'GoldMango',
+        'BloodstoneCycad',
+        'ColossalPinecone',
+        'VoltGinkgo',
+    },
+    Multi = true,
+    Default = cfg.feedsList or {},
+})
+
+local feedsToggle = Tabs.Peds:AddToggle("feedsToggle", { Title = "ให้อาหารอัตโนมัติ", Default = cfg.feedsToggle or false })
+
+feeds:OnChanged(function(Value)
+    feedsList = {}
+    for Value, State in next, Value do
+        table.insert(feedsList, Value)
+    end
+
+    cfg.feedsList = feedsList
+    SaveConfig(cfg)
+end)
+
+feedsToggle:OnChanged(function()
+    cfg.feedsToggle = Options.feedsToggle.Value
+    SaveConfig(cfg)
+    if not Options.feedsToggle.Value then return end
+
+    task.spawn(function()
+        while Options.feedsToggle.Value do
+            for _, name in pairs(feedsList) do
+                print(_, name)
+            end
+
+            task.wait(1)
         end
     end)
 end)
