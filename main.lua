@@ -249,56 +249,56 @@ storeToggle:OnChanged(function()
     end)
 end)
 
-local feedsList = {}
-Tabs.Peds = Window:AddTab({ Title = "สัตว์หน้าบ้าน", Icon = "" })
-local feeds = Tabs.Peds:AddDropdown("feeds", {
-    Title = "อาหาร",
-    Values = {
-        'Strawberry',
-        'Blueberry',
-        'Watermelon',
-        'Apple',
-        'Orange',
-        'Corn',
-        'Banana',
-        'Grape',
-        'Pear',
-        'Pineapple',
-        'GoldMango',
-        'BloodstoneCycad',
-        'ColossalPinecone',
-        'VoltGinkgo',
-    },
-    Multi = true,
-    Default = cfg.feedsList or {},
-})
+-- local feedsList = {}
+-- Tabs.Peds = Window:AddTab({ Title = "สัตว์หน้าบ้าน", Icon = "" })
+-- local feeds = Tabs.Peds:AddDropdown("feeds", {
+--     Title = "อาหาร",
+--     Values = {
+--         'Strawberry',
+--         'Blueberry',
+--         'Watermelon',
+--         'Apple',
+--         'Orange',
+--         'Corn',
+--         'Banana',
+--         'Grape',
+--         'Pear',
+--         'Pineapple',
+--         'GoldMango',
+--         'BloodstoneCycad',
+--         'ColossalPinecone',
+--         'VoltGinkgo',
+--     },
+--     Multi = true,
+--     Default = cfg.feedsList or {},
+-- })
 
-local feedsToggle = Tabs.Peds:AddToggle("feedsToggle", { Title = "ให้อาหารอัตโนมัติ", Default = cfg.feedsToggle or false })
+-- local feedsToggle = Tabs.Peds:AddToggle("feedsToggle", { Title = "ให้อาหารอัตโนมัติ", Default = cfg.feedsToggle or false })
 
-feeds:OnChanged(function(Value)
-    feedsList = {}
-    for Value, State in next, Value do
-        table.insert(feedsList, Value)
-    end
+-- feeds:OnChanged(function(Value)
+--     feedsList = {}
+--     for Value, State in next, Value do
+--         table.insert(feedsList, Value)
+--     end
 
-    cfg.feedsList = feedsList
-    SaveConfig(cfg)
-end)
+--     cfg.feedsList = feedsList
+--     SaveConfig(cfg)
+-- end)
 
-feedsToggle:OnChanged(function()
-    cfg.feedsToggle = Options.feedsToggle.Value
-    SaveConfig(cfg)
-    if not Options.feedsToggle.Value then return end
+-- feedsToggle:OnChanged(function()
+--     cfg.feedsToggle = Options.feedsToggle.Value
+--     SaveConfig(cfg)
+--     if not Options.feedsToggle.Value then return end
 
-    task.spawn(function()
-        while Options.feedsToggle.Value do
-            for _, name in pairs(feedsList) do
-                print(_, name)
-            end
+--     task.spawn(function()
+--         while Options.feedsToggle.Value do
+--             for _, name in pairs(feedsList) do
+--                 print(_, name)
+--             end
 
-            task.wait(1)
-        end
-    end)
-end)
+--             task.wait(1)
+--         end
+--     end)
+-- end)
 
 Window:SelectTab(1)
