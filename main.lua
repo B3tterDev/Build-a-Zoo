@@ -89,6 +89,7 @@ Money:OnChanged(function()
     end)
 end)
 
+
 type:OnChanged(function(Value)
     local Values = {}
     for Value, State in next, Value do
@@ -104,6 +105,7 @@ type:OnChanged(function(Value)
     SaveConfig(cfg)
 end)
 
+local mutationsMap = { ['Jurassic'] = "Dino" }
 mutations:OnChanged(function(Value)
     local Values = {}
     for Value, State in next, Value do
@@ -112,7 +114,8 @@ mutations:OnChanged(function(Value)
 
     eggs.mutations = {}
     for k, v in pairs(Values) do
-        eggs.mutations[v] = true
+        local name = mutationsMap[v] or v
+        eggs.mutations[name] = true
     end
 
     cfg.mutations = Values
@@ -153,7 +156,7 @@ Eggs:OnChanged(function()
                 end
             end
 
-            task.wait(5)
+            task.wait(2)
         end
     end)
 end)
