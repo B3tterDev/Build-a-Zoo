@@ -118,6 +118,7 @@ mutations:OnChanged(function(Value)
         eggs.mutations[name] = true
     end
 
+    print(table.concat(eggs.mutations, ", "))
     cfg.mutations = Values
     SaveConfig(cfg)
 end)
@@ -129,14 +130,11 @@ Eggs:OnChanged(function()
 
     task.spawn(function()
         while Options.Eggs.Value do
-
             local accounts = game:GetService("Players").LocalPlayer.leaderstats["Money $"]
             local AssignedIslandName = game:GetService("Players").LocalPlayer:GetAttribute("AssignedIslandName")
             local Conveyor = game:GetService("ReplicatedStorage").Eggs:WaitForChild(AssignedIslandName):GetChildren()
 
 
-
-            print(HttpService:JSONEncode(eggs.mutations))
             for _, Egg in pairs(Conveyor) do
                 local T = Egg:GetAttribute('T')
                 local M = Egg:GetAttribute('M')
