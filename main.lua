@@ -137,13 +137,13 @@ Eggs:OnChanged(function()
                 local T = Egg:GetAttribute('T')
                 local M = Egg:GetAttribute('M')
                 local UID = Egg:GetAttribute('UID')
-
-                print(M, next(eggs.mutations) and (M and eggs.mutations[M]))
-
+                
                 if next(eggs.type) and (T and eggs.type[T]) then
-                    if next(eggs.mutations) and (M and eggs.mutations[M]) then
-                        local args = { [1] = "BuyEgg", [2] = UID }
-                        game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("CharacterRE"):FireServer(unpack(args))
+                    if next(eggs.mutations) then
+                        if (M and eggs.mutations[M]) then
+                            local args = { [1] = "BuyEgg", [2] = UID }
+                            game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("CharacterRE"):FireServer(unpack(args))
+                        end
                     else
                         local args = { [1] = "BuyEgg", [2] = UID }
                         game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("CharacterRE"):FireServer(unpack(args))
