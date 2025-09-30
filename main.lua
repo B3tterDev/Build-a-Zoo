@@ -66,6 +66,7 @@ local mutations = Tabs.Main:AddDropdown("mutations", {
         "Electric", 
         "Fire", 
         "Jurassic",
+        "Ice Snow"
     },
     Multi = true,
     Default = cfg.mutations or {},
@@ -83,7 +84,7 @@ Money:OnChanged(function()
             for _, v in pairs(pets) do
                 game:GetService("Workspace"):WaitForChild("Pets"):WaitForChild(v.Name):WaitForChild("RootPart"):WaitForChild("RE"):FireServer(unpack({[1] = "Claim"}))
             end
-            task.wait(5)
+            task.wait(30.0)
         end
     end)
 end)
@@ -103,7 +104,7 @@ type:OnChanged(function(Value)
     SaveConfig(cfg)
 end)
 
-local mutationsMap = { ['Jurassic'] = "Dino" }
+local mutationsMap = { ['Jurassic'] = "Dino", ['Ice Snow'] = "Snow" }
 mutations:OnChanged(function(Value)
     local Values = {}
     for Value, State in next, Value do
