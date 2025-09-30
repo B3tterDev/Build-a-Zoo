@@ -179,6 +179,9 @@ end)
 -- game:GetService("Players").LocalPlayer.PlayerGui.ScreenFoodStore.Root.Frame.ScrollingFrame.BloodstoneCycad
 -- game:GetService("Players").LocalPlayer.PlayerGui.ScreenFoodStore.Root.Frame.ScrollingFrame.ColossalPinecone
 -- game:GetService("Players").LocalPlayer.PlayerGui.ScreenFoodStore.Root.Frame.ScrollingFrame.VoltGinkgo
+-- game:GetService("Players").LocalPlayer.PlayerGui.ScreenFoodStore.Root.Frame.ScrollingFrame.DragonFruit
+-- game:GetService("Players").LocalPlayer.PlayerGui.ScreenFoodStore.Root.Frame.ScrollingFrame.Durian
+-- game:GetService("Players").LocalPlayer.PlayerGui.ScreenFoodStore.Root.Frame.ScrollingFrame.DeepseaPearlFruit
 
 Tabs.Store = Window:AddTab({ Title = "ร้านค้า", Icon = "" })
 
@@ -198,10 +201,13 @@ local store = Tabs.Store:AddDropdown("store", {
         'Grape',
         'Pear',
         'Pineapple',
+        'DragonFruit',
         'GoldMango',
         'BloodstoneCycad',
         'ColossalPinecone',
         'VoltGinkgo',
+        'DeepseaPearlFruit',
+        'Durian',
     },
     Multi = true,
     Default = cfg.storeList or {},
