@@ -1,4 +1,5 @@
 repeat wait() until game:IsLoaded()
+wait(15)
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
 local Window = Fluent:CreateWindow({
     Title = "Build a Zoo",
@@ -282,6 +283,18 @@ AnimationToggle:OnChanged(function()
                     end
                 end
             end
+
+            local PlayerBuiltBlocks = game:GetService("Workspace"):WaitForChild("PlayerBuiltBlocks")
+            for _, v in pairs(PlayerBuiltBlocks:GetChildren()) do
+                local builtModel = PlayerBuiltBlocks:FindFirstChild(v.Name)
+                if builtModel then
+                    local animCtrl = builtModel:FindFirstChild("AnimationController")
+                    if animCtrl then
+                        animCtrl:Destroy()
+                    end
+                end
+            end
+            
             task.wait(30)
         end
     end)
