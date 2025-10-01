@@ -82,9 +82,13 @@ Money:OnChanged(function()
         while Options.Money.Value do
             local pets = game:GetService("Players").LocalPlayer.PlayerGui.Data.Pets:GetChildren()
             for _, v in pairs(pets) do
-                game:GetService("Workspace"):WaitForChild("Pets"):WaitForChild(v.Name):WaitForChild("RootPart"):WaitForChild("RE"):FireServer(unpack({[1] = "Claim"}))
+                local petModel = game:GetService("Workspace"):FindFirstChild("Pets"):FindFirstChild(v.Name)
+                if petModel and petModel:FindFirstChild("RootPart") and petModel.RootPart:FindFirstChild("RE") then
+                    local args = { "Claim" }
+                    petModel.RootPart.RE:FireServer(unpack(args))
+                end
             end
-            task.wait(30.0)
+            task.wait(5)
         end
     end)
 end)
@@ -252,6 +256,32 @@ storeToggle:OnChanged(function()
             end
 
             task.wait(10)
+        end
+    end)
+end)
+
+Tabs.Efficiency = Window:AddTab({ Title = "ประสิทธิภาพ", Icon = "" })
+
+local AnimationToggle = Tabs.Efficiency:AddToggle("AnimationToggle", { Title = "ปิด Animation", Default = cfg.AnimationToggle or false })
+
+AnimationToggle:OnChanged(function()
+    cfg.AnimationToggle = Options.AnimationToggle.Value
+    SaveConfig(cfg)
+    if not Options.AnimationToggle.Value then return end
+
+    task.spawn(function()
+        while Options.AnimationToggle.Value do
+            local pets = game:GetService("Workspace"):WaitForChild("Pets")
+            for _, v in pairs(pets:GetChildren()) do
+                local petModel = pets:FindFirstChild(v.Name)
+                if petModel then
+                    local animCtrl = petModel:FindFirstChild("AnimationController")
+                    if animCtrl then
+                        animCtrl:Destroy()
+                    end
+                end
+            end
+            task.wait(30)
         end
     end)
 end)
