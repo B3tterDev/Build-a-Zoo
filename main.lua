@@ -1,5 +1,7 @@
+print('[B3tterDev] Initializing data ..')
 repeat wait() until game:IsLoaded()
 wait(15)
+print("[B3tterDev] Verification successful, this resource is READY to use")
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
 local Window = Fluent:CreateWindow({
     Title = "Build a Zoo",
