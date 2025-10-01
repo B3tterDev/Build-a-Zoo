@@ -89,7 +89,7 @@ Money:OnChanged(function()
                     petModel.RootPart.RE:FireServer(unpack(args))
                 end
             end
-            task.wait(5)
+            task.wait(10)
         end
     end)
 end)
@@ -256,7 +256,7 @@ storeToggle:OnChanged(function()
                 end
             end
 
-            task.wait(10)
+            task.wait(5)
         end
     end)
 end)
