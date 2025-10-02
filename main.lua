@@ -94,18 +94,18 @@ CONFIG.STORE_LIST = {
 }
 
 local Money = Tabs.Main:AddToggle("Money", { Title = "เก็บเงินอัตโนมัติ", Default = cfg.money or false })
-local type = Tabs.Main:AddDropdown("type", {
+local egg_type = Tabs.Main:AddDropdown("egg_type", {
     Title = "ประเภทไข่",
     Values = CONFIG.EGG_TYPE,
     Multi = true,
-    Default = {},
+    Default = cfg.type or {},
 })
 
 local mutations = Tabs.Main:AddDropdown("mutations", {
     Title = "ประเภทการกลายพันธุ์",
     Values = CONFIG.EGG_MUTATIONS,
     Multi = true,
-    Default = {},
+    Default = cfg.mutations or {},
 })
 
 local Eggs = Tabs.Main:AddToggle("Eggs", { Title = "เก็บไข่อัตโนมัติ", Default = cfg.eggs or false })
@@ -129,9 +129,10 @@ Money:OnChanged(function()
     end)
 end)
 
-type:OnChanged(function(Value)
+egg_type:OnChanged(function(Value)
     local Values = {}
     for k, v in Value do
+        if type(k) == "number" then return end
         table.insert(Values, k)
     end
 
@@ -144,31 +145,21 @@ type:OnChanged(function(Value)
     SaveConfig(cfg)
 end)
 
-for k, v in pairs(cfg.type) do
-    eggs.type[v] = true
-end type:SetValue(eggs.type)
-
-local mutationsMap = { ['Jurassic'] = "Dino", ['Ice Snow'] = "Snow" }
 mutations:OnChanged(function(Value)
     local Values = {}
     for k, v in Value do
+        if type(k) == "number" then return end
         table.insert(Values, k)
     end
 
     eggs.mutations = {}
-    for k, v in pairs(Values) do
-        local name = mutationsMap[v] or v
+    for k, name in pairs(Values) do
         eggs.mutations[name] = true
     end
 
     cfg.mutations = Values
     SaveConfig(cfg)
 end)
-
-for k, v in pairs(cfg.mutations) do
-    local name = mutationsMap[v] or v
-    eggs.mutations[name] = true
-end mutations:SetValue(eggs.mutations)
 
 Eggs:OnChanged(function()
     cfg.eggs = Options.Eggs.Value
@@ -213,24 +204,6 @@ Eggs:OnChanged(function()
     end)
 end)
 
--- game:GetService("Players").LocalPlayer.PlayerGui.ScreenFoodStore.Root.Frame.ScrollingFrame.Strawberry
--- game:GetService("Players").LocalPlayer.PlayerGui.ScreenFoodStore.Root.Frame.ScrollingFrame.Blueberry
--- game:GetService("Players").LocalPlayer.PlayerGui.ScreenFoodStore.Root.Frame.ScrollingFrame.Watermelon
--- game:GetService("Players").LocalPlayer.PlayerGui.ScreenFoodStore.Root.Frame.ScrollingFrame.Apple
--- game:GetService("Players").LocalPlayer.PlayerGui.ScreenFoodStore.Root.Frame.ScrollingFrame.Orange
--- game:GetService("Players").LocalPlayer.PlayerGui.ScreenFoodStore.Root.Frame.ScrollingFrame.Corn
--- game:GetService("Players").LocalPlayer.PlayerGui.ScreenFoodStore.Root.Frame.ScrollingFrame.Banana
--- game:GetService("Players").LocalPlayer.PlayerGui.ScreenFoodStore.Root.Frame.ScrollingFrame.Grape
--- game:GetService("Players").LocalPlayer.PlayerGui.ScreenFoodStore.Root.Frame.ScrollingFrame.Pear
--- game:GetService("Players").LocalPlayer.PlayerGui.ScreenFoodStore.Root.Frame.ScrollingFrame.Pineapple
--- game:GetService("Players").LocalPlayer.PlayerGui.ScreenFoodStore.Root.Frame.ScrollingFrame.GoldMango
--- game:GetService("Players").LocalPlayer.PlayerGui.ScreenFoodStore.Root.Frame.ScrollingFrame.BloodstoneCycad
--- game:GetService("Players").LocalPlayer.PlayerGui.ScreenFoodStore.Root.Frame.ScrollingFrame.ColossalPinecone
--- game:GetService("Players").LocalPlayer.PlayerGui.ScreenFoodStore.Root.Frame.ScrollingFrame.VoltGinkgo
--- game:GetService("Players").LocalPlayer.PlayerGui.ScreenFoodStore.Root.Frame.ScrollingFrame.DragonFruit
--- game:GetService("Players").LocalPlayer.PlayerGui.ScreenFoodStore.Root.Frame.ScrollingFrame.Durian
--- game:GetService("Players").LocalPlayer.PlayerGui.ScreenFoodStore.Root.Frame.ScrollingFrame.DeepseaPearlFruit
-
 Tabs.Store = Window:AddTab({ Title = "ร้านค้า", Icon = "" })
 
 local storeValues = {}
@@ -240,7 +213,7 @@ local store = Tabs.Store:AddDropdown("store", {
     Title = "สินค้า",
     Values = CONFIG.STORE_LIST,
     Multi = true,
-    Default = {},
+    Default = cfg.storeList or {},
 })
 
 local storeToggle = Tabs.Store:AddToggle("storeToggle", { Title = "ซื้อของอัตโนมัติ", Default = cfg.storeToggle or false })
@@ -248,17 +221,13 @@ local storeToggle = Tabs.Store:AddToggle("storeToggle", { Title = "ซื้อ�
 store:OnChanged(function(Value)
     storeList = {}
     for k, v in Value do
+        if type(k) == "number" then return end
         table.insert(storeList, k)
     end
 
     cfg.storeList = storeList
     SaveConfig(cfg)
 end)
-
-local setValue = {}
-for k, v in pairs(cfg.storeList) do
-    setValue[v] = true
-end store:SetValue(setValue)
 
 storeToggle:OnChanged(function()
     cfg.storeToggle = Options.storeToggle.Value
