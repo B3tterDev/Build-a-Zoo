@@ -259,7 +259,7 @@ end)
 Tabs.Efficiency = Window:AddTab({ Title = "ประสิทธิภาพ", Icon = "" })
 
 local AnimationToggle = Tabs.Efficiency:AddToggle("AnimationToggle", { Title = "ปิด Animation", Default = cfg.AnimationToggle or false })
-local AnimationToggle = Tabs.Efficiency:AddToggle("AnimationToggle", { Title = "ปิด Animation", Default = cfg.AnimationToggle or false })
+local CoinToggle = Tabs.Efficiency:AddToggle("CoinToggle", { Title = "ปิด Popup", Default = cfg.CoinToggle or false })
 
 AnimationToggle:OnChanged(function()
     cfg.AnimationToggle = Options.AnimationToggle.Value
@@ -295,23 +295,26 @@ AnimationToggle:OnChanged(function()
     end)
 end)
 
-task.spawn(function()
-    local Shared = require(game:GetService("ReplicatedStorage"):WaitForChild("Shared"))
-    local Formatter = Shared("Format")
+CoinToggle:OnChanged(function()
+    cfg.CoinToggle = Options.CoinToggle.Value
+    SaveConfig(cfg)
+    if not Options.CoinToggle.Value then return end
 
-    while true do
-        local accounts = game:GetService("Players").LocalPlayer.leaderstats["Money $"].Value
-        local popupDrop = game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("PopupDrop")
-        local coinHud = game:GetService("Players").LocalPlayer.PlayerGui.OverlaySafe:WaitForChild("CoinHud")
-        local textLabel = coinHud:WaitForChild("Value")
+    task.spawn(function()
+        while Options.CoinToggle.Value do
+            local accounts = game:GetService("Players").LocalPlayer.leaderstats["Money $"].Value
+            local popupDrop = game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("PopupDrop")
+            local coinHud = game:GetService("Players").LocalPlayer.PlayerGui.OverlaySafe:WaitForChild("CoinHud")
+            local textLabel = coinHud:WaitForChild("Value")
 
-        if popupDrop then
-            popupDrop:Destroy()
+            if popupDrop then
+                popupDrop:Destroy()
+            end
+
+            textLabel.Text = Formatter:Number2String(accounts, "en")
+            task.wait(0.2)
         end
-
-        textLabel.Text = Formatter:Number2String(accounts, "en")
-        task.wait(0.2)
-    end
+    end)
 end)
 
 Window:SelectTab(1)
