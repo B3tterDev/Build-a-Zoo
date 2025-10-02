@@ -297,12 +297,11 @@ end)
 task.spawn(function()
     local Shared = require(game:GetService("ReplicatedStorage"):WaitForChild("Shared"))
     local Formatter = Shared("Format")
-    local player = game:GetService("Players").LocalPlayer
 
     while true do
-        local accounts = player.leaderstats["Money $"].Value
-        local popupDrop = player.PlayerGui:FindFirstChild("PopupDrop")
-        local coinHud = player.PlayerGui.OverlaySafe:WaitForChild("CoinHud")
+        local accounts = game:GetService("Players").LocalPlayer.leaderstats["Money $"].Value
+        local popupDrop = game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("PopupDrop")
+        local coinHud = game:GetService("Players").LocalPlayer.PlayerGui.OverlaySafe:WaitForChild("CoinHud")
         local textLabel = coinHud:WaitForChild("Value") -- ตรวจชื่อให้ตรงกับจริง
 
         if popupDrop then
@@ -310,7 +309,7 @@ task.spawn(function()
         end
 
         textLabel.Text = Formatter:Number2String(accounts, "en")
-        task.wait(0.1)
+        task.wait(0.2)
     end
 end)
 
