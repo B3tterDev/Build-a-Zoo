@@ -301,6 +301,8 @@ CoinToggle:OnChanged(function()
     if not Options.CoinToggle.Value then return end
 
     task.spawn(function()
+        local Shared = require(game:GetService("ReplicatedStorage"):WaitForChild("Shared"))
+        local Formatter = Shared("Format")
         while Options.CoinToggle.Value do
             local accounts = game:GetService("Players").LocalPlayer.leaderstats["Money $"].Value
             local popupDrop = game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("PopupDrop")
