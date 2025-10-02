@@ -76,7 +76,7 @@ local mutations = Tabs.Main:AddDropdown("mutations", {
         "Electric", 
         "Fire", 
         "Jurassic",
-        "Ice Snow"
+        "Snow"
     },
     Multi = true,
     Default = cfg.mutations or {},
@@ -152,6 +152,7 @@ Eggs:OnChanged(function()
                 local M = Egg:GetAttribute('M')
                 local UID = Egg:GetAttribute('UID')
                 
+                print(T, M, UID)
                 if next(eggs.type) then
                     if (T and eggs.type[T]) then
                         if next(eggs.mutations) then
