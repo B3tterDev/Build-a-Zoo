@@ -63,6 +63,8 @@ local type = Tabs.Main:AddDropdown("type", {
         "UnicornProEgg",
         "GeneralKongEgg",
         "PegasusEgg",
+
+        "SnowbunnyEgg"
     },
     Multi = true,
     Default = cfg.type or {},
@@ -152,7 +154,7 @@ Eggs:OnChanged(function()
                 local M = Egg:GetAttribute('M')
                 local UID = Egg:GetAttribute('UID')
                 
-                print(T, M, UID)
+                print(T, M, UID, (T and eggs.type and eggs.type[T]), (M and eggs.mutations and eggs.mutations[M]))
                 if next(eggs.type) then
                     if (T and eggs.type[T]) then
                         if next(eggs.mutations) then
