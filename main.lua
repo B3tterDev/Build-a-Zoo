@@ -33,7 +33,7 @@ function LoadConfig()
     return {}
 end
 
-local eggs = {}
+local eggs = { type = {}, mutations = {} }
 local cfg = LoadConfig()
 local CONFIG = {}
 
@@ -131,9 +131,8 @@ end)
 
 egg_type:OnChanged(function(Value)
     local Values = {}
-    for k, v in Value do
-        if type(k) == "number" then return end
-        table.insert(Values, k)
+    for k, v in next, Value do
+        if type(k) ~= "number" then table.insert(Values, k) end
     end
 
     eggs.type = {}
@@ -147,9 +146,8 @@ end)
 
 mutations:OnChanged(function(Value)
     local Values = {}
-    for k, v in Value do
-        if type(k) == "number" then return end
-        table.insert(Values, k)
+    for k, v in next, Value do
+        if type(k) ~= "number" then table.insert(Values, k) end
     end
 
     eggs.mutations = {}
@@ -171,7 +169,6 @@ Eggs:OnChanged(function()
             local accounts = game:GetService("Players").LocalPlayer.leaderstats["Money $"]
             local AssignedIslandName = game:GetService("Players").LocalPlayer:GetAttribute("AssignedIslandName")
             local Conveyor = game:GetService("ReplicatedStorage").Eggs:WaitForChild(AssignedIslandName):GetChildren()
-
 
             for _, Egg in pairs(Conveyor) do
                 local T = Egg:GetAttribute('T')
@@ -220,9 +217,8 @@ local storeToggle = Tabs.Store:AddToggle("storeToggle", { Title = "ซื้อ�
 
 store:OnChanged(function(Value)
     storeList = {}
-    for k, v in Value do
-        if type(k) == "number" then return end
-        table.insert(storeList, k)
+    for k, v in next, Value do
+        if type(k) ~= "number" then table.insert(storeList, k) end
     end
 
     cfg.storeList = storeList
@@ -236,8 +232,8 @@ storeToggle:OnChanged(function()
 
     task.spawn(function()
         while Options.storeToggle.Value do
-            if next(storeList) then
-                for _, name in pairs(storeList) do
+            if next(cfg.storeList) then
+                for _, name in pairs(cfg.storeList) do
                     local ScrollingFrame = game:GetService("Players").LocalPlayer.PlayerGui.ScreenFoodStore.Root.Frame.ScrollingFrame
                     local StockFrame = ScrollingFrame:FindFirstChild(name)
                     if StockFrame and StockFrame:FindFirstChild("ItemButton") and StockFrame.ItemButton:FindFirstChild("StockLabel") then
