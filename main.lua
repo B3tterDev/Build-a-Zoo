@@ -35,51 +35,75 @@ end
 
 local eggs = {}
 local cfg = LoadConfig()
+local CONFIG = {}
+
+CONFIG.EGG_TYPE = {
+    "BasicEgg",
+    "RareEgg", 
+    "SuperRareEgg", 
+    "EpicEgg", 
+    "LegendEgg",
+    "PrismaticEgg",
+    "HyperEgg",
+    "DarkGoatyEgg",
+    "VoidEgg",
+    "BowserEgg",
+    "DemonEgg",
+    "RhinoRockEgg",
+    "CornEgg",
+    "BoneDragonEgg",
+    "UltraEgg",
+    "DinoEgg",
+    "FlyEgg",
+    "SaberCubEgg",
+    "UnicornEgg",
+    "AncientEgg",
+    "UnicornProEgg",
+    "GeneralKongEgg",
+    "PegasusEgg",
+    "SnowbunnyEgg"
+}
+
+CONFIG.EGG_MUTATIONS = {
+    "Golden", 
+    "Diamond", 
+    "Electric", 
+    "Fire", 
+    "Jurassic",
+    "Snow"
+}
+
+CONFIG.STORE_LIST = {
+    'Strawberry',
+    'Blueberry',
+    'Watermelon',
+    'Apple',
+    'Orange',
+    'Corn',
+    'Banana',
+    'Grape',
+    'Pear',
+    'Pineapple',
+    'DragonFruit',
+    'GoldMango',
+    'BloodstoneCycad',
+    'ColossalPinecone',
+    'VoltGinkgo',
+    'DeepseaPearlFruit',
+    'Durian',
+}
 
 local Money = Tabs.Main:AddToggle("Money", { Title = "เก็บเงินอัตโนมัติ", Default = cfg.money or false })
 local type = Tabs.Main:AddDropdown("type", {
     Title = "ประเภทไข่",
-    Values = {
-        "BasicEgg", 
-        "RareEgg", 
-        "SuperRareEgg", 
-        "EpicEgg", 
-        "LegendEgg",
-        "PrismaticEgg",
-        "HyperEgg",
-        "DarkGoatyEgg",
-        "VoidEgg",
-        "BowserEgg",
-        "DemonEgg",
-        "RhinoRockEgg",
-        "CornEgg",
-        "BoneDragonEgg",
-        "UltraEgg",
-        "DinoEgg",
-        "FlyEgg",
-        "SaberCubEgg",
-        "UnicornEgg",
-        "AncientEgg",
-        "UnicornProEgg",
-        "GeneralKongEgg",
-        "PegasusEgg",
-
-        "SnowbunnyEgg"
-    },
+    Values = CONFIG.EGG_TYPE,
     Multi = true,
     Default = cfg.type or {},
 })
 
 local mutations = Tabs.Main:AddDropdown("mutations", {
     Title = "ประเภทการกลายพันธุ์",
-    Values = {
-        "Golden", 
-        "Diamond", 
-        "Electric", 
-        "Fire", 
-        "Jurassic",
-        "Snow"
-    },
+    Values = CONFIG.EGG_MUTATIONS,
     Multi = true,
     Default = cfg.mutations or {},
 })
@@ -107,8 +131,10 @@ end)
 
 type:OnChanged(function(Value)
     local Values = {}
-    for Value, State in next, Value do
-        table.insert(Values, Value)
+    for v, state in next, Value do
+        if type(v) == "string" then
+            table.insert(Values, v)
+        end
     end
 
     eggs.type = {}
@@ -123,8 +149,10 @@ end)
 local mutationsMap = { ['Jurassic'] = "Dino", ['Ice Snow'] = "Snow" }
 mutations:OnChanged(function(Value)
     local Values = {}
-    for Value, State in next, Value do
-        table.insert(Values, Value)
+    for v, state in next, Value do
+        if type(v) == "string" then
+            table.insert(Values, v)
+        end
     end
 
     eggs.mutations = {}
@@ -153,8 +181,6 @@ Eggs:OnChanged(function()
                 local T = Egg:GetAttribute('T')
                 local M = Egg:GetAttribute('M')
                 local UID = Egg:GetAttribute('UID')
-                
-                print(T, M, UID)
                 if next(eggs.type) then
                     if (T and eggs.type[T]) then
                         if next(eggs.mutations) then
@@ -207,25 +233,7 @@ local storeList = {}
 
 local store = Tabs.Store:AddDropdown("store", {
     Title = "สินค้า",
-    Values = {
-        'Strawberry',
-        'Blueberry',
-        'Watermelon',
-        'Apple',
-        'Orange',
-        'Corn',
-        'Banana',
-        'Grape',
-        'Pear',
-        'Pineapple',
-        'DragonFruit',
-        'GoldMango',
-        'BloodstoneCycad',
-        'ColossalPinecone',
-        'VoltGinkgo',
-        'DeepseaPearlFruit',
-        'Durian',
-    },
+    Values = CONFIG.STORE_LIST,
     Multi = true,
     Default = cfg.storeList or {},
 })
@@ -234,8 +242,10 @@ local storeToggle = Tabs.Store:AddToggle("storeToggle", { Title = "ซื้อ�
 
 store:OnChanged(function(Value)
     storeList = {}
-    for Index, State in next, Value do
-        table.insert(storeList, Index)
+    for v, state in next, Value do
+        if type(v) == "string" then
+            table.insert(storeList, v)
+        end
     end
 
     cfg.storeList = storeList
@@ -310,57 +320,5 @@ AnimationToggle:OnChanged(function()
         end
     end)
 end)
-
--- local feedsList = {}
--- Tabs.Peds = Window:AddTab({ Title = "สัตว์หน้าบ้าน", Icon = "" })
--- local feeds = Tabs.Peds:AddDropdown("feeds", {
---     Title = "อาหาร",
---     Values = {
---         'Strawberry',
---         'Blueberry',
---         'Watermelon',
---         'Apple',
---         'Orange',
---         'Corn',
---         'Banana',
---         'Grape',
---         'Pear',
---         'Pineapple',
---         'GoldMango',
---         'BloodstoneCycad',
---         'ColossalPinecone',
---         'VoltGinkgo',
---     },
---     Multi = true,
---     Default = cfg.feedsList or {},
--- })
-
--- local feedsToggle = Tabs.Peds:AddToggle("feedsToggle", { Title = "ให้อาหารอัตโนมัติ", Default = cfg.feedsToggle or false })
-
--- feeds:OnChanged(function(Value)
---     feedsList = {}
---     for Value, State in next, Value do
---         table.insert(feedsList, Value)
---     end
-
---     cfg.feedsList = feedsList
---     SaveConfig(cfg)
--- end)
-
--- feedsToggle:OnChanged(function()
---     cfg.feedsToggle = Options.feedsToggle.Value
---     SaveConfig(cfg)
---     if not Options.feedsToggle.Value then return end
-
---     task.spawn(function()
---         while Options.feedsToggle.Value do
---             for _, name in pairs(feedsList) do
---                 print(_, name)
---             end
-
---             task.wait(1)
---         end
---     end)
--- end)
 
 Window:SelectTab(1)
