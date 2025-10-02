@@ -239,7 +239,7 @@ local storeToggle = Tabs.Store:AddToggle("storeToggle", { Title = "ซื้อ�
 store:OnChanged(function(Value)
     storeList = {}
     for k, v in Value do
-        table.insert(Values, k)
+        table.insert(storeList, k)
     end
 
     cfg.storeList = storeList
