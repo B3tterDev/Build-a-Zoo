@@ -294,4 +294,24 @@ AnimationToggle:OnChanged(function()
     end)
 end)
 
+task.spawn(function()
+    local Shared = require(game:GetService("ReplicatedStorage"):WaitForChild("Shared"))
+    local Formatter = Shared("Format")
+    local player = game:GetService("Players").LocalPlayer
+
+    while true do
+        local accounts = player.leaderstats["Money $"].Value
+        local popupDrop = player.PlayerGui:FindFirstChild("PopupDrop")
+        local coinHud = player.PlayerGui.OverlaySafe:WaitForChild("CoinHud")
+        local textLabel = coinHud:WaitForChild("Value") -- ตรวจชื่อให้ตรงกับจริง
+
+        if popupDrop then
+            popupDrop:Destroy()
+        end
+
+        textLabel.Text = Formatter:Number2String(accounts, "en")
+        task.wait(0.1)
+    end
+end)
+
 Window:SelectTab(1)
