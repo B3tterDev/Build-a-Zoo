@@ -131,10 +131,8 @@ end)
 
 type:OnChanged(function(Value)
     local Values = {}
-    for v, state in next, Value do
-        if type(v) == "string" then
-            table.insert(Values, v)
-        end
+    for k, v in Value do
+        table.insert(Values, k)
     end
 
     eggs.type = {}
@@ -149,10 +147,8 @@ end)
 local mutationsMap = { ['Jurassic'] = "Dino", ['Ice Snow'] = "Snow" }
 mutations:OnChanged(function(Value)
     local Values = {}
-    for v, state in next, Value do
-        if type(v) == "string" then
-            table.insert(Values, v)
-        end
+    for k, v in Value do
+        table.insert(Values, k)
     end
 
     eggs.mutations = {}
@@ -242,10 +238,8 @@ local storeToggle = Tabs.Store:AddToggle("storeToggle", { Title = "ซื้อ�
 
 store:OnChanged(function(Value)
     storeList = {}
-    for v, state in next, Value do
-        if type(v) == "string" then
-            table.insert(storeList, v)
-        end
+    for k, v in Value do
+        table.insert(Values, k)
     end
 
     cfg.storeList = storeList
