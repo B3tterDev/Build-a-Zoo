@@ -259,6 +259,7 @@ end)
 Tabs.Efficiency = Window:AddTab({ Title = "ประสิทธิภาพ", Icon = "" })
 
 local AnimationToggle = Tabs.Efficiency:AddToggle("AnimationToggle", { Title = "ปิด Animation", Default = cfg.AnimationToggle or false })
+local AnimationToggle = Tabs.Efficiency:AddToggle("AnimationToggle", { Title = "ปิด Animation", Default = cfg.AnimationToggle or false })
 
 AnimationToggle:OnChanged(function()
     cfg.AnimationToggle = Options.AnimationToggle.Value
@@ -302,7 +303,7 @@ task.spawn(function()
         local accounts = game:GetService("Players").LocalPlayer.leaderstats["Money $"].Value
         local popupDrop = game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("PopupDrop")
         local coinHud = game:GetService("Players").LocalPlayer.PlayerGui.OverlaySafe:WaitForChild("CoinHud")
-        local textLabel = coinHud:WaitForChild("Value") -- ตรวจชื่อให้ตรงกับจริง
+        local textLabel = coinHud:WaitForChild("Value")
 
         if popupDrop then
             popupDrop:Destroy()
