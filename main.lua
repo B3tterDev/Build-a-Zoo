@@ -69,7 +69,7 @@ CONFIG.EGG_MUTATIONS = {
     "Diamond", 
     "Electric", 
     "Fire", 
-    "Jurassic",
+    "Dino",
     "Snow"
 }
 
@@ -98,14 +98,14 @@ local type = Tabs.Main:AddDropdown("type", {
     Title = "ประเภทไข่",
     Values = CONFIG.EGG_TYPE,
     Multi = true,
-    Default = cfg.type or {},
+    Default = {},
 })
 
 local mutations = Tabs.Main:AddDropdown("mutations", {
     Title = "ประเภทการกลายพันธุ์",
     Values = CONFIG.EGG_MUTATIONS,
     Multi = true,
-    Default = cfg.mutations or {},
+    Default = {},
 })
 
 local Eggs = Tabs.Main:AddToggle("Eggs", { Title = "เก็บไข่อัตโนมัติ", Default = cfg.eggs or false })
@@ -144,6 +144,10 @@ type:OnChanged(function(Value)
     SaveConfig(cfg)
 end)
 
+for k, v in pairs(cfg.type) do
+    eggs.type[v] = true
+end type:SetValue(eggs.type)
+
 local mutationsMap = { ['Jurassic'] = "Dino", ['Ice Snow'] = "Snow" }
 mutations:OnChanged(function(Value)
     local Values = {}
@@ -160,6 +164,11 @@ mutations:OnChanged(function(Value)
     cfg.mutations = Values
     SaveConfig(cfg)
 end)
+
+for k, v in pairs(cfg.mutations) do
+    local name = mutationsMap[v] or v
+    eggs.mutations[name] = true
+end mutations:SetValue(eggs.mutations)
 
 Eggs:OnChanged(function()
     cfg.eggs = Options.Eggs.Value
@@ -231,7 +240,7 @@ local store = Tabs.Store:AddDropdown("store", {
     Title = "สินค้า",
     Values = CONFIG.STORE_LIST,
     Multi = true,
-    Default = cfg.storeList or {},
+    Default = {},
 })
 
 local storeToggle = Tabs.Store:AddToggle("storeToggle", { Title = "ซื้อของอัตโนมัติ", Default = cfg.storeToggle or false })
@@ -245,6 +254,11 @@ store:OnChanged(function(Value)
     cfg.storeList = storeList
     SaveConfig(cfg)
 end)
+
+local setValue = {}
+for k, v in pairs(cfg.storeList) do
+    setValue[v] = true
+end store:SetValue(setValue)
 
 storeToggle:OnChanged(function()
     cfg.storeToggle = Options.storeToggle.Value
