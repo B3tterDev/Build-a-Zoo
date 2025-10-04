@@ -304,6 +304,7 @@ CoinToggle:OnChanged(function()
     if popupDrop then popupDrop:Destroy() end
 end)
 
+Window:SelectTab(1)
 local Shared = require(game:GetService("ReplicatedStorage"):WaitForChild("Shared"))
 local Formatter = Shared("Format")
 local moneyStat = game:GetService("Players").LocalPlayer:WaitForChild("leaderstats"):WaitForChild("Money $")
@@ -314,5 +315,3 @@ moneyStat.Changed:Connect(function(newValue)
 
     textLabel.Text = Formatter:Number2String(newValue, "en")
 end)
-
-Window:SelectTab(1)
