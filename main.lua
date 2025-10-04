@@ -300,23 +300,19 @@ CoinToggle:OnChanged(function()
     SaveConfig(cfg)
     if not Options.CoinToggle.Value then return end
 
-    task.spawn(function()
-        local Shared = require(game:GetService("ReplicatedStorage"):WaitForChild("Shared"))
-        local Formatter = Shared("Format")
-        while Options.CoinToggle.Value do
-            local accounts = game:GetService("Players").LocalPlayer.leaderstats["Money $"].Value
-            local popupDrop = game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("PopupDrop")
-            local coinHud = game:GetService("Players").LocalPlayer.PlayerGui.OverlaySafe:WaitForChild("CoinHud")
-            local textLabel = coinHud:WaitForChild("Value")
+    local popupDrop = game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("PopupDrop")
+    if popupDrop then popupDrop:Destroy() end
+end)
 
-            if popupDrop then
-                popupDrop:Destroy()
-            end
+local Shared = require(game:GetService("ReplicatedStorage"):WaitForChild("Shared"))
+local Formatter = Shared("Format")
+local moneyStat = game:GetService("Players").LocalPlayer:WaitForChild("leaderstats"):WaitForChild("Money $")
+moneyStat.Changed:Connect(function(newValue)
+    if not Options.CoinToggle.Value then return end
+    local coinHud = game:GetService("Players").LocalPlayer.PlayerGui.OverlaySafe:WaitForChild("CoinHud")
+    local textLabel = coinHud:WaitForChild("Value")
 
-            textLabel.Text = Formatter:Number2String(accounts, "en")
-            task.wait(0.2)
-        end
-    end)
+    textLabel.Text = Formatter:Number2String(newValue, "en")
 end)
 
 Window:SelectTab(1)
