@@ -201,6 +201,9 @@ Eggs:OnChanged(function()
     end)
 end)
 
+-- local Hatch = Tabs.Main:AddToggle("Hatch", { Title = "ฟักไข่อัตโนมัติ", Default = cfg.hatch or false })
+-- game:GetService("Players").LocalPlayer.PlayerGui.Data.Egg
+
 Tabs.Store = Window:AddTab({ Title = "ร้านค้า", Icon = "" })
 
 local storeValues = {}
@@ -260,6 +263,8 @@ Tabs.Efficiency = Window:AddTab({ Title = "ประสิทธิภาพ", I
 
 local AnimationToggle = Tabs.Efficiency:AddToggle("AnimationToggle", { Title = "ปิด Animation", Default = cfg.AnimationToggle or false })
 local CoinToggle = Tabs.Efficiency:AddToggle("CoinToggle", { Title = "ปิด Popup", Default = cfg.CoinToggle or false })
+local PetModelToggle = Tabs.Efficiency:AddToggle("PetModelToggle", { Title = "ปิด Pet Model", Default = cfg.PetModelToggle or false })
+local EggsModelToggle = Tabs.Efficiency:AddToggle("EggsModelToggle", { Title = "ปิด Egg Model", Default = cfg.EggsModelToggle or false })
 
 AnimationToggle:OnChanged(function()
     cfg.AnimationToggle = Options.AnimationToggle.Value
@@ -276,6 +281,11 @@ AnimationToggle:OnChanged(function()
                     if animCtrl then
                         animCtrl:Destroy()
                     end
+
+                    local MutateFX = petModel:FindFirstChild("MutateFX_Inst")
+                    if MutateFX then
+                        MutateFX:Destroy()
+                    end
                 end
             end
 
@@ -286,6 +296,59 @@ AnimationToggle:OnChanged(function()
                     local animCtrl = builtModel:FindFirstChild("AnimationController")
                     if animCtrl then
                         animCtrl:Destroy()
+                    end
+
+                    local MutateFX = builtModel:FindFirstChild("MutateFX_Inst")
+                    if MutateFX then
+                        MutateFX:Destroy()
+                    end
+                end
+            end
+
+            task.wait(30)
+        end
+    end)
+end)
+
+PetModelToggle:OnChanged(function()
+    cfg.PetModelToggle = Options.PetModelToggle.Value
+    SaveConfig(cfg)
+    if not Options.PetModelToggle.Value then return end
+
+    task.spawn(function()
+        while Options.PetModelToggle.Value do
+            local pets = game:GetService("Workspace"):WaitForChild("Pets")
+            for _, v in pairs(pets:GetChildren()) do
+                local petModel = pets:FindFirstChild(v.Name)
+                if petModel then
+                    for _, obj in ipairs(petModel:GetDescendants()) do
+                        if obj:IsA("BasePart") and obj.Name ~= "RootPart" then
+                            obj:Destroy()
+                        end
+                    end
+                end
+            end
+
+            task.wait(30)
+        end
+    end)
+end)
+
+EggsModelToggle:OnChanged(function()
+    cfg.EggsModelToggle = Options.EggsModelToggle.Value
+    SaveConfig(cfg)
+    if not Options.EggsModelToggle.Value then return end
+
+    task.spawn(function()
+        while Options.EggsModelToggle.Value do
+            local PlayerBuiltBlocks = game:GetService("Workspace"):WaitForChild("PlayerBuiltBlocks")
+            for _, v in pairs(PlayerBuiltBlocks:GetChildren()) do
+                local builtModel = PlayerBuiltBlocks:FindFirstChild(v.Name)
+                if builtModel then
+                    for _, obj in ipairs(builtModel:GetDescendants()) do
+                        if obj:IsA("BasePart") and obj.Name ~= "RootPart" then
+                            obj:Destroy()
+                        end
                     end
                 end
             end
