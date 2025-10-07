@@ -224,6 +224,11 @@ store:OnChanged(function(Value)
         if type(k) ~= "number" then table.insert(storeList, k) end
     end
 
+    storeValues = {}
+    for k, name in pairs(Values) do
+        storeValues[name] = true
+    end
+
     cfg.storeList = storeList
     SaveConfig(cfg)
 end)
@@ -231,32 +236,43 @@ end)
 storeToggle:OnChanged(function()
     cfg.storeToggle = Options.storeToggle.Value
     SaveConfig(cfg)
+    -- if not Options.storeToggle.Value then return end
+
+    -- task.spawn(function()
+    --     while Options.storeToggle.Value do
+    --         if next(cfg.storeList) then
+    --             for _, name in pairs(cfg.storeList) do
+    --                 local ScrollingFrame = game:GetService("Players").LocalPlayer.PlayerGui.ScreenFoodStore.Root.Frame.ScrollingFrame
+    --                 local StockFrame = ScrollingFrame:FindFirstChild(name)
+    --                 if StockFrame and StockFrame:FindFirstChild("ItemButton") and StockFrame.ItemButton:FindFirstChild("StockLabel") then
+    --                     local StockLabel = StockFrame.ItemButton.StockLabel
+    --                     if StockLabel.Text ~= "No Stock" then
+    --                         local StockInt = string.gsub(StockLabel.Text, "x", "")
+    --                         StockInt = tonumber(StockInt)
+
+    --                         for i = 1, StockInt do
+    --                             game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("FoodStoreRE"):FireServer(name)
+    --                             task.wait(0.1)
+    --                         end
+    --                     end
+    --                 end
+    --             end
+    --         end
+
+    --         task.wait(5)
+    --     end
+    -- end)
+end)
+
+local LST = game:GetService("Players").LocalPlayer.PlayerGui.Data:WaitForChild("FoodStore"):WaitForChild("LST")
+LST.AttributeChanged:Connect(function(attrName)
     if not Options.storeToggle.Value then return end
+    local val = LST:GetAttribute(attrName)
+    if not storeValues[attrName] then return end
 
-    task.spawn(function()
-        while Options.storeToggle.Value do
-            if next(cfg.storeList) then
-                for _, name in pairs(cfg.storeList) do
-                    local ScrollingFrame = game:GetService("Players").LocalPlayer.PlayerGui.ScreenFoodStore.Root.Frame.ScrollingFrame
-                    local StockFrame = ScrollingFrame:FindFirstChild(name)
-                    if StockFrame and StockFrame:FindFirstChild("ItemButton") and StockFrame.ItemButton:FindFirstChild("StockLabel") then
-                        local StockLabel = StockFrame.ItemButton.StockLabel
-                        if StockLabel.Text ~= "No Stock" then
-                            local StockInt = string.gsub(StockLabel.Text, "x", "")
-                            StockInt = tonumber(StockInt)
-
-                            for i = 1, StockInt do
-                                game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("FoodStoreRE"):FireServer(name)
-                                task.wait(0.1)
-                            end
-                        end
-                    end
-                end
-            end
-
-            task.wait(5)
-        end
-    end)
+    if val and tonumber(val) > 0 then
+        game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("FoodStoreRE"):FireServer(attrName)
+    end
 end)
 
 Tabs.Efficiency = Window:AddTab({ Title = "ประสิทธิภาพ", Icon = "" })
