@@ -1,6 +1,6 @@
 print('[B3tterDev] Initializing data ..')
 repeat wait() until game:IsLoaded()
-wait(30)
+repeat task.wait() until game.Players.LocalPlayer:GetAttribute("DinoEventOnlineTime") ~= nil
 print("[B3tterDev] Verification successful, this resource is READY to use")
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
 local Window = Fluent:CreateWindow({
@@ -236,8 +236,14 @@ end)
 storeToggle:OnChanged(function()
     cfg.storeToggle = Options.storeToggle.Value
     SaveConfig(cfg)
-    -- if not Options.storeToggle.Value then return end
+    if not Options.storeToggle.Value then return end
 
+    local LST = game:GetService("Players").LocalPlayer.PlayerGui.Data:WaitForChild("FoodStore"):WaitForChild("LST")
+    for attr, val in pairs(LST:GetAttributes()) do
+        if storeValues[attr] and val and tonumber(val) > 0 then
+            game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("FoodStoreRE"):FireServer(attr)
+        end
+    end
     -- task.spawn(function()
     --     while Options.storeToggle.Value do
     --         if next(cfg.storeList) then
@@ -262,6 +268,10 @@ storeToggle:OnChanged(function()
     --         task.wait(5)
     --     end
     -- end)
+
+    for k, v in ipairs() do
+
+    end
 end)
 
 local LST = game:GetService("Players").LocalPlayer.PlayerGui.Data:WaitForChild("FoodStore"):WaitForChild("LST")
