@@ -1,6 +1,6 @@
 print('[B3tterDev] Initializing data ..')
 repeat wait() until game:IsLoaded()
-wait(30)
+repeat task.wait() until game.Players.LocalPlayer:GetAttribute("DinoEventOnlineTime") ~= nil
 print("[B3tterDev] Verification successful, this resource is READY to use")
 
 task.spawn(function()
@@ -67,3 +67,4 @@ moneyStat.Changed:Connect(function(newValue)
 
     textLabel.Text = Formatter:Number2String(newValue, "en")
 end)
+
