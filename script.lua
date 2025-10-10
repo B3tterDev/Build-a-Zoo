@@ -13,7 +13,7 @@ task.spawn(function()
                 petModel.RootPart.RE:FireServer(unpack(args))
             end
         end
-        task.wait(1)
+        task.wait(30.0)
     end
 end)
 
@@ -67,3 +67,4 @@ moneyStat.Changed:Connect(function(newValue)
 
     textLabel.Text = Formatter:Number2String(newValue, "en")
 end)
+
