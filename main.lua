@@ -268,10 +268,6 @@ storeToggle:OnChanged(function()
     --         task.wait(5)
     --     end
     -- end)
-
-    for k, v in ipairs() do
-
-    end
 end)
 
 local LST = game:GetService("Players").LocalPlayer.PlayerGui.Data:WaitForChild("FoodStore"):WaitForChild("LST")
