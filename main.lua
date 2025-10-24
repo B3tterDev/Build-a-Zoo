@@ -119,9 +119,9 @@ Money:OnChanged(function()
             local pets = game:GetService("Players").LocalPlayer.PlayerGui.Data.Pets:GetChildren()
             for _, v in pairs(pets) do
                 local petModel = game:GetService("Workspace"):FindFirstChild("Pets"):FindFirstChild(v.Name)
-                if petModel and petModel:FindFirstChild("RootPart") and petModel.RootPart:FindFirstChild("RE") then
+                if petModel and petModel:FindFirstChild("RE") then
                     local args = { "Claim" }
-                    petModel.RootPart.RE:FireServer(unpack(args))
+                    petModel.RE:FireServer(unpack(args))
                 end
             end
             task.wait(5)
