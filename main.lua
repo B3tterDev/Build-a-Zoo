@@ -37,61 +37,59 @@ local eggs = { type = {}, mutations = {} }
 local cfg = LoadConfig()
 local CONFIG = {}
 
-CONFIG.EGG_TYPE = {
-    "BasicEgg",
-    "RareEgg", 
-    "SuperRareEgg", 
-    "EpicEgg", 
-    "LegendEgg",
-    "PrismaticEgg",
-    "HyperEgg",
-    "DarkGoatyEgg",
-    "VoidEgg",
-    "BowserEgg",
-    "DemonEgg",
-    "RhinoRockEgg",
-    "CornEgg",
-    "BoneDragonEgg",
-    "UltraEgg",
-    "DinoEgg",
-    "FlyEgg",
-    "SaberCubEgg",
-    "UnicornEgg",
-    "AncientEgg",
-    "UnicornProEgg",
-    "GeneralKongEgg",
-    "PegasusEgg",
-    "SnowbunnyEgg"
-}
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ResEgg = require(ReplicatedStorage.Config.ResEgg)
+local ResMutate = require(ReplicatedStorage.Config.ResMutate)
+local ResPetFood = require(ReplicatedStorage.Config.ResPetFood)
+CONFIG.EGG_TYPE = ResEgg.__index
+CONFIG.EGG_MUTATIONS = ResMutate.__index
+CONFIG.STORE_LIST = ResPetFood.__index
+-- CONFIG.EGG_TYPE = {
+--     "BasicEgg",
+--     "RareEgg", 
+--     "SuperRareEgg", 
+--     "EpicEgg", 
+--     "LegendEgg",
+--     "PrismaticEgg",
+--     "HyperEgg",
+--     "DarkGoatyEgg",
+--     "VoidEgg",
+--     "BowserEgg",
+--     "DemonEgg",
+--     "RhinoRockEgg",
+--     "CornEgg",
+--     "BoneDragonEgg",
+--     "UltraEgg",
+--     "DinoEgg",
+--     "FlyEgg",
+--     "SaberCubEgg",
+--     "UnicornEgg",
+--     "AncientEgg",
+--     "UnicornProEgg",
+--     "GeneralKongEgg",
+--     "PegasusEgg",
+--     "SnowbunnyEgg"
+-- }
 
-CONFIG.EGG_MUTATIONS = {
-    "Golden", 
-    "Diamond", 
-    "Electric", 
-    "Fire", 
-    "Dino",
-    "Snow"
-}
-
-CONFIG.STORE_LIST = {
-    'Strawberry',
-    'Blueberry',
-    'Watermelon',
-    'Apple',
-    'Orange',
-    'Corn',
-    'Banana',
-    'Grape',
-    'Pear',
-    'Pineapple',
-    'DragonFruit',
-    'GoldMango',
-    'BloodstoneCycad',
-    'ColossalPinecone',
-    'VoltGinkgo',
-    'DeepseaPearlFruit',
-    'Durian',
-}
+-- CONFIG.STORE_LIST = {
+--     'Strawberry',
+--     'Blueberry',
+--     'Watermelon',
+--     'Apple',
+--     'Orange',
+--     'Corn',
+--     'Banana',
+--     'Grape',
+--     'Pear',
+--     'Pineapple',
+--     'DragonFruit',
+--     'GoldMango',
+--     'BloodstoneCycad',
+--     'ColossalPinecone',
+--     'VoltGinkgo',
+--     'DeepseaPearlFruit',
+--     'Durian',
+-- }
 
 local Money = Tabs.Main:AddToggle("Money", { Title = "เก็บเงินอัตโนมัติ", Default = cfg.money or false })
 local egg_type = Tabs.Main:AddDropdown("egg_type", {
@@ -225,7 +223,7 @@ store:OnChanged(function(Value)
     end
 
     storeValues = {}
-    for k, name in pairs(Values) do
+    for k, name in pairs(storeList) do
         storeValues[name] = true
     end
 
